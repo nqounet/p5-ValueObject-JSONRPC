@@ -65,7 +65,7 @@ member; this object enforces that requirement.
 
 Constructor. Accepts an optional C<value> argument. The value must be the
 string C<'2.0'>; providing any other value (including numeric 2, other
-strings like C<'2'> or C<'1.0'>, or non‑scalar references) will cause the
+strings like C<'2'> or C<'1.0'>, or non-scalar references) will cause the
 constructor to die with the message:
 
   JSON-RPC version MUST be '2.0', got '...'
