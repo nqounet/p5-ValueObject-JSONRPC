@@ -2,51 +2,102 @@
 
 Short, concrete guidance so an AI can be productive immediately in this repo.
 
-- Project purpose: a small Perl value-object distribution implementing JSON-RPC primitives. Primary modules:
-  - lib/ValueObject/JSONRPC.pm — distribution/package entry (exports version in $VERSION)
-  - lib/ValueObject/JSONRPC/Version.pm — the JSON-RPC `jsonrpc` version value object (core example)
+(keep existing content above; add the following AI-agent focused notes)
 
-- Big picture:
-  - This is a single-purpose CPAN-style Perl module. The codebase follows the ValueObject pattern: immutable objects, read-only accessors, explicit validation in constructors.
-  - Tests live in `t/` and drive expected behaviors. Follow the tests when changing behavior.
+## AI-agent additions (discovered patterns & quick checklist)
 
-- Key files to read before making changes:
-  - [lib/ValueObject/JSONRPC.pm](lib/ValueObject/JSONRPC.pm)
-  - [lib/ValueObject/JSONRPC/Version.pm](lib/ValueObject/JSONRPC/Version.pm)
-  - [t/value_object/jsonrpc/version.t](t/value_object/jsonrpc/version.t)
-  - [cpanfile](cpanfile) (declares dev/runtime deps)
-  - [.github/workflows/test.yml](.github/workflows/test.yml) (CI: installs deps with `cpanm` and runs `prove -lr t`)
+- Inspect these files first when changing behavior:
+  - lib/ValueObject/JSONRPC.pm (package entry / $VERSION)
+  - lib/ValueObject/JSONRPC/Version.pm
+  - lib/ValueObject/JSONRPC/MethodName.pm
+  - lib/ValueObject/JSONRPC/Id.pm
+  - lib/ValueObject/JSONRPC/Params.pm
+  - lib/ValueObject/JSONRPC/Code.pm
+  - lib/ValueObject/JSONRPC/Error.pm
+  - lib/ValueObject/JSONRPC/Result.pm
+  - Tests: t/value_object/jsonrpc/*.t
 
-- Testing & developer workflow (use these exact commands):
-  - Install dependencies locally: `cpanm -nq --installdeps --with-develop --with-recommends .`
-  - Run the test suite: `prove -lr t`
-  - CI uses the same approach; match CI behavior to avoid surprises across Perl versions.
+- Dev workflow (match CI exactly):
+  - Install deps: `cpanm -nq --installdeps --with-develop --with-recommends .`
+  - Run tests: `prove -lr t`
+  - CI uses the same commands; use them locally to reproduce CI.
 
-- Conventions and patterns to follow:
-  - API style: use `Moo` for objects and `namespace::clean` for tidy symbols (see `Version.pm`).
-  - Validation: constructors die on invalid values. Tests expect `dies`/`like dies { ... }` in `t/` files.
-  - Equality: value objects implement an `equals` method that accepts either a plain string or another instance of the same class; return false for `undef` or other types.
-  - Stringification: objects may overload `""` to return the scalar representation (see `overload '""' => sub { $_[0]->value }`).
-  - Module versioning: use `version->declare("vX.Y.Z")` in the top-level module.
+- Concrete conventions to follow:
+  - Use `Moo` + `namespace::clean` for objects.
+  - Constructors must `die` on invalid input; tests assert die-messages with regexes.
+  - Provide `equals($other)` that accepts a scalar OR same-class instance; return `1`/`0`.
+  - Implement stringification with `overload '""' => sub { $_[0]->value }` when appropriate.
+  - Use `Storable::freeze` for deep equality comparisons (used in `Params`, `Result`, `Error->data`).
 
-- Adding a new value object: mirror `ValueObject::JSONRPC::Version` structure
-  - Place code under `lib/ValueObject/JSONRPC/YourThing.pm`.
-  - Add tests under `t/value_object/jsonrpc/yourthing.t` following `Test2::V0` style used now.
-  - Ensure constructor validation dies for invalid input and that equality/stringification semantics are covered in tests.
+- VO-specific rules (explicit):
+  - `Version`: only the exact string `'2.0'`.
+  - `MethodName`: non-empty string; MUST NOT start with `rpc.`; reject pure-numeric scalars.
+  - `Id`: allowed types: `undef` (null), non-ref scalar (string or number); refs rejected.
+  - `Params`: must be `ARRAY` or `HASH` (JSON array/object); scalar params rejected.
+  - `Code`: integer only (regex `^-?\d+$`).
+  - `Error`: `code` must be a `ValueObject::JSONRPC::Code` instance; `message` non-empty; `data` optional JSON.
+  - `Result`: any JSON value (scalar, ARRAY, HASH, or null); reject non-JSON refs (glob/filehandles).
 
-- Packaging notes:
-  - Distribution uses `Build.PL` and contains `minil.toml`/`cpanfile`. CI installs deps with `cpanm` and runs `prove` (no `dzil` steps in CI).
+- Test authoring notes:
+  - Tests use `Test2::V0`. Per-module tests commonly include `-target => 'ValueObject::JSONRPC::<Name>'`.
+  - Use `like dies { ... }, qr/JSON-RPC .../` to assert validation messages.
+  - Keep tests minimal and authoritative — they define acceptable types and exact die messages.
 
-- Examples from codebase:
-  - Exact-version requirement: `ValueObject::JSONRPC::Version` accepts only the string `'2.0'` (see `isa` sub in `Version.pm` and tests in `t/.../version.t`).
-  - Tests use `Test2::V0 -target => 'ValueObject::JSONRPC::Version'` and `prove -lr t` to run them.
+- Adding a new value object (quick scaffold):
+  1. Create `lib/ValueObject/JSONRPC/YourThing.pm` following `Version.pm`.
+  2. Add `t/value_object/jsonrpc/yourthing.t` with `Test2::V0 -target => 'ValueObject::JSONRPC::YourThing'`.
+  3. Implement `value` accessor, `equals`, `overload '""'` if needed, and strict `isa` validation that dies with message fragments containing `JSON-RPC`.
+  4. Run `prove -lr t`. Match CI to avoid surprises.
+  5. If public API changes, bump `version->declare("vX.Y.Z")` in `lib/ValueObject/JSONRPC.pm` and add `Changes` entry.
 
-- When editing tests or behavior:
-  - Preserve the exact string-matching semantics (e.g., do not accept numeric `2` for version unless tests and docs are updated).
-  - Update `lib/ValueObject/JSONRPC.pm` `$VERSION` consistently when making API changes.
+If you want, I will now (re)attempt to apply this merge and fully replace the file with the integrated content. Proceed with updating the file?# GitHub Copilot / AI agent instructions for p5-ValueObject-JSONRPC
 
-- Ask the maintainer if unsure about:
-  - Changing any fundamental validation rules (e.g., relaxing the '2.0' requirement).
-  - Adding public APIs beyond simple value objects; this may require packaging/versioning discussion.
+Short, concrete guidance so an AI can be productive immediately in this repo.
 
-If any of these points are unclear or you want more examples to be included, tell me which area to expand. 
+(keep existing content above; add the following AI-agent focused notes)
+
+## AI-agent additions (discovered patterns & quick checklist)
+
+- Inspect these files first when changing behavior:
+  - lib/ValueObject/JSONRPC.pm (package entry / $VERSION)
+  - lib/ValueObject/JSONRPC/Version.pm
+  - lib/ValueObject/JSONRPC/MethodName.pm
+  - lib/ValueObject/JSONRPC/Id.pm
+  - lib/ValueObject/JSONRPC/Params.pm
+  - lib/ValueObject/JSONRPC/Code.pm
+  - lib/ValueObject/JSONRPC/Error.pm
+  - lib/ValueObject/JSONRPC/Result.pm
+  - Tests: t/value_object/jsonrpc/*.t
+
+- Dev workflow (match CI exactly):
+  - Install deps: `cpanm -nq --installdeps --with-develop --with-recommends .`
+  - Run tests: `prove -lr t`
+  - CI uses the same commands; use them locally to reproduce CI.
+
+- Concrete conventions to follow:
+  - Use `Moo` + `namespace::clean` for objects.
+  - Constructors must `die` on invalid input; tests assert die-messages with regexes.
+  - Provide `equals($other)` that accepts a scalar OR same-class instance; return `1`/`0`.
+  - Implement stringification with `overload '""' => sub { $_[0]->value }` when appropriate.
+  - Use `Storable::freeze` for deep equality comparisons (used in `Params`, `Result`, `Error->data`).
+
+- VO-specific rules (explicit):
+  - `Version`: only the exact string `'2.0'`.
+  - `MethodName`: non-empty string; MUST NOT start with `rpc.`; reject pure-numeric scalars.
+  - `Id`: allowed types: `undef` (null), non-ref scalar (string or number); refs rejected.
+  - `Params`: must be `ARRAY` or `HASH` (JSON array/object); scalar params rejected.
+  - `Code`: integer only (regex `^-?\d+$`).
+  - `Error`: `code` must be a `ValueObject::JSONRPC::Code` instance; `message` non-empty; `data` optional JSON.
+  - `Result`: any JSON value (scalar, ARRAY, HASH, or null); reject non-JSON refs (glob/filehandles).
+
+- Test authoring notes:
+  - Tests use `Test2::V0`. Per-module tests commonly include `-target => 'ValueObject::JSONRPC::<Name>'`.
+  - Use `like dies { ... }, qr/JSON-RPC .../` to assert validation messages.
+  - Keep tests minimal and authoritative — they define acceptable types and exact die messages.
+
+- Adding a new value object (quick scaffold):
+  1. Create `lib/ValueObject/JSONRPC/YourThing.pm` following `Version.pm`.
+  2. Add `t/value_object/jsonrpc/yourthing.t` with `Test2::V0 -target => 'ValueObject::JSONRPC::YourThing'`.
+  3. Implement `value` accessor, `equals`, `overload '""'` if needed, and strict `isa` validation that dies with message fragments containing `JSON-RPC`.
+  4. Run `prove -lr t`. Match CI to avoid surprises.
+  5. If public API changes, bump `version->declare("vX.Y.Z")` in `lib/ValueObject/JSONRPC.pm` and add `Changes` entry.
