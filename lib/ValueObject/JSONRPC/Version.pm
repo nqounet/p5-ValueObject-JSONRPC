@@ -4,7 +4,7 @@ use warnings FATAL => 'all';
 
 use Moo;
 use namespace::clean -except => 'meta';
-use overload '""' => sub {$_[0]->value}, fallback => 1;
+use overload '""' => sub { $_[0]->value }, fallback => 1;
 
 has 'value' => (
   is      => 'ro',
