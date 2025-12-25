@@ -1,4 +1,4 @@
-
+[![Actions Status](https://github.com/nqounet/p5-ValueObject-JSONRPC/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/nqounet/p5-ValueObject-JSONRPC/actions?workflow=test)
 # NAME
 
 ValueObject::JSONRPC - It's new $module

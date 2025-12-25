@@ -42,17 +42,31 @@
       },
       "runtime" : {
          "requires" : {
+            "Moo" : "2",
+            "Types::Standard" : "1",
             "perl" : "5.008001"
          }
       },
       "test" : {
          "requires" : {
-            "Test::More" : "0.98"
+            "Test2::Tools::Exception" : "0",
+            "Test2::V0" : "0"
          }
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/nqounet/p5-ValueObject-JSONRPC/issues"
+      },
+      "homepage" : "https://github.com/nqounet/p5-ValueObject-JSONRPC",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/nqounet/p5-ValueObject-JSONRPC.git",
+         "web" : "https://github.com/nqounet/p5-ValueObject-JSONRPC"
+      }
+   },
+   "version" : "v2.0.0",
    "x_serialization_backend" : "JSON::PP version 4.16",
    "x_static_install" : 1
 }
