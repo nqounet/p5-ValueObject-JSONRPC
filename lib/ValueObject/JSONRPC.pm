@@ -42,7 +42,28 @@ Implemented value objects:
 - `ValueObject::JSONRPC::Result`
 - `ValueObject::JSONRPC::Request`, `Notification`, `SuccessResponse`, `ErrorResponse`
 
+SEE ALSO
+
+L<ValueObject::JSONRPC::Version>, L<ValueObject::JSONRPC::MethodName>,
+L<ValueObject::JSONRPC::Id>, L<ValueObject::JSONRPC::Params>,
+L<ValueObject::JSONRPC::Code>, L<ValueObject::JSONRPC::Error>,
+L<ValueObject::JSONRPC::Result>
+
+INSTALLATION
+
+Install prerequisites and run tests locally:
+
+    cpanm -nq --installdeps --with-develop --with-recommends .
+    minil test
+    # or
+    prove -lr t
+
 =head1 LICENSE
+
+=head1 VERSION
+
+This document corresponds to distribution version $VERSION.
+
 
 Copyright (C) nqounet.
 

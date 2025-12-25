@@ -18,3 +18,25 @@ sub equals {
 }
 
 1;
+
+__END__
+=head1 NAME
+
+=encoding utf-8
+
+=head1 NAME
+=head1 NAME
+
+ValueObject::JSONRPC::Role::EqualsValueString - string value equality role
+
+=head1 DESCRIPTION
+
+Role providing an C<equals> implementation for objects identified by a
+string C<value> attribute. Compares against strings or same-class
+objects.
+
+=head1 AUTHOR
+
+nqounet
+
+=cut

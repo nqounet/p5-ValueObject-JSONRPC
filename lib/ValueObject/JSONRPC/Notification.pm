@@ -57,9 +57,36 @@ sub _equals_attributes { qw(jsonrpc method params); }
 
 1;
 __END__
+=head1 NAME
 
+=encoding utf-8
+
+=head1 NAME
 =head1 NAME
 
 ValueObject::JSONRPC::Notification - JSON-RPC notification value object
+
+=head1 SYNOPSIS
+
+    use ValueObject::JSONRPC::Notification;
+    my $n = ValueObject::JSONRPC::Notification->new(
+        method => ValueObject::JSONRPC::MethodName->new(value => 'foo'),
+        params => ValueObject::JSONRPC::Params->new(value => []),
+    );
+
+=head1 DESCRIPTION
+
+Represents a JSON-RPC notification (a request without an `id`). The
+object contains `jsonrpc`, `method` and optional `params` members.
+
+=head1 METHODS
+
+=head2 new(%args)
+
+Constructor; C<method> is required, C<params> is optional.
+
+=head1 AUTHOR
+
+nqounet
 
 =cut

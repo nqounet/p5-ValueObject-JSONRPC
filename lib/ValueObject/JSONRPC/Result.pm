@@ -67,4 +67,29 @@ __END__
 
 ValueObject::JSONRPC::Result — JSON-RPC result value object
 
+=head1 SYNOPSIS
+
+    use ValueObject::JSONRPC::Result;
+    my $r = ValueObject::JSONRPC::Result->new(value => { ok => 1 });
+
+=head1 DESCRIPTION
+
+Represents the JSON-RPC `result` member. The value may be any JSON
+value: scalar, array, object or null.
+
+=head1 METHODS
+
+=head2 new(value => $val)
+
+Constructor; C<value> may be undef for a null result.
+
+=head2 equals($other)
+
+Compare with another result object or raw array/hashref/scalar. Deep
+comparison uses L<Storable>'s C<freeze> when necessary.
+
+=head1 AUTHOR
+
+nqounet
+
 =cut

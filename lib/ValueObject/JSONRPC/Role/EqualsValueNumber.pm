@@ -18,3 +18,25 @@ sub equals {
 }
 
 1;
+
+__END__
+=head1 NAME
+
+=encoding utf-8
+
+=head1 NAME
+=head1 NAME
+
+ValueObject::JSONRPC::Role::EqualsValueNumber - numeric value equality role
+
+=head1 DESCRIPTION
+
+Role that provides an C<equals> method for objects whose identity is a
+numeric C<value> attribute. Can compare against raw numbers or same-class
+objects.
+
+=head1 AUTHOR
+
+nqounet
+
+=cut

@@ -57,8 +57,34 @@ sub _equals_attributes { qw(jsonrpc error id); }
 1;
 __END__
 
+=encoding utf-8
+
 =head1 NAME
 
 ValueObject::JSONRPC::ErrorResponse - failed JSON-RPC response
+
+=head1 SYNOPSIS
+
+    use ValueObject::JSONRPC::ErrorResponse;
+    my $r = ValueObject::JSONRPC::ErrorResponse->new(
+        error => $error_obj,
+        id => ValueObject::JSONRPC::Id->new(value => 1),
+    );
+
+=head1 DESCRIPTION
+
+Represents a failed JSON-RPC response. It contains the protocol
+version (`jsonrpc`), an `error` (L<ValueObject::JSONRPC::Error>) and an
+`id` (L<ValueObject::JSONRPC::Id>). A `result` member is not allowed.
+
+=head1 METHODS
+
+=head2 new(%args)
+
+Constructor; requires C<error> and C<id>.
+
+=head1 AUTHOR
+
+nqounet
 
 =cut

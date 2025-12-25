@@ -34,3 +34,25 @@ sub equals {
 }
 
 1;
+
+__END__
+=head1 NAME
+
+=encoding utf-8
+
+=head1 NAME
+=head1 NAME
+
+ValueObject::JSONRPC::Role::EqualsByAttributes - role for attribute-wise equals
+
+=head1 DESCRIPTION
+
+Provides an C<equals> method that compares the listed attributes from
+the implementing class. Each attribute is compared using an object's
+own C<equals> method when available, or by stringification otherwise.
+
+=head1 AUTHOR
+
+nqounet
+
+=cut

@@ -48,4 +48,29 @@ __END__
 
 ValueObject::JSONRPC::Params — JSON-RPC params value object
 
+=head1 SYNOPSIS
+
+    use ValueObject::JSONRPC::Params;
+    my $p = ValueObject::JSONRPC::Params->new(value => { x => 1 });
+
+=head1 DESCRIPTION
+
+Represents the JSON-RPC `params` member which must be an array or
+object. The value is stored as an arrayref or hashref.
+
+=head1 METHODS
+
+=head2 new(value => $arrayref|$hashref)
+
+Constructor; C<value> must be an arrayref or hashref.
+
+=head2 equals($other)
+
+Compare with another params object or a raw array/hashref. Comparison
+is done by stringifying via L<Storable>'s C<freeze>.
+
+=head1 AUTHOR
+
+nqounet
+
 =cut

@@ -31,7 +31,29 @@ Implemented value objects:
 \- \`ValueObject::JSONRPC::Result\`
 \- \`ValueObject::JSONRPC::Request\`, \`Notification\`, \`SuccessResponse\`, \`ErrorResponse\`
 
+SEE ALSO
+
+[ValueObject::JSONRPC::Version](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AVersion), [ValueObject::JSONRPC::MethodName](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AMethodName),
+[ValueObject::JSONRPC::Id](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AId), [ValueObject::JSONRPC::Params](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AParams),
+[ValueObject::JSONRPC::Code](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3ACode), [ValueObject::JSONRPC::Error](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AError),
+[ValueObject::JSONRPC::Result](https://metacpan.org/pod/ValueObject%3A%3AJSONRPC%3A%3AResult)
+
+INSTALLATION
+
+Install prerequisites and run tests locally:
+
+```
+cpanm -nq --installdeps --with-develop --with-recommends .
+minil test
+# or
+prove -lr t
+```
+
 # LICENSE
+
+# VERSION
+
+This document corresponds to distribution version $VERSION.
 
 Copyright (C) nqounet.
 
