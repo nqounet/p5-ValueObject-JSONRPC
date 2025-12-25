@@ -7,33 +7,37 @@ use constant REQUIRED_VERSION => '2.0';
 use Moo;
 use namespace::clean -except => 'meta';
 
-use overload '""' => sub { $_[0]->value }, fallback => 1;
+use overload
+  '""'     => sub { $_[0]->value },
+  fallback => 1;
 
 has 'value' => (
-  is      => 'ro',
-  default => sub { REQUIRED_VERSION },
-  isa     => sub {
-    my $v = $_[0];
-    my $display = defined $v ? $v : '<undef>';
-    unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
-      die qq{JSON-RPC version MUST be '} . REQUIRED_VERSION . qq{', got '$display'};
-    }
-  },
+    is      => 'ro',
+    default => sub {REQUIRED_VERSION},
+    isa     => sub {
+        my $v       = $_[0];
+        my $display = defined $v ? $v : '<undef>';
+        unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
+            die qq{JSON-RPC version MUST be '}
+              . REQUIRED_VERSION
+              . qq{', got '$display'};
+        }
+    },
 );
 
 sub equals {
-  my ($self, $other) = @_;
+    my ($self, $other) = @_;
 
-  return 0 unless defined $other;
+    return 0 unless defined $other;
 
-  # object: must be same class and have the same value
-  if (ref $other) {
-    return 0 unless ref $other eq ref $self;
-    return $self->value eq $other->value ? 1 : 0;
-  }
+    # object: must be same class and have the same value
+    if (ref $other) {
+        return 0 unless ref $other eq ref $self;
+        return $self->value eq $other->value ? 1 : 0;
+    }
 
-  # string/primitive: compare directly
-  return $self->value eq $other ? 1 : 0;
+    # string/primitive: compare directly
+    return $self->value eq $other ? 1 : 0;
 }
 
 1;

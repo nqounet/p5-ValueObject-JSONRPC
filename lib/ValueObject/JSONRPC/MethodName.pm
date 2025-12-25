@@ -5,43 +5,46 @@ use warnings;
 use Moo;
 use namespace::clean -except => 'meta';
 
-use overload '""' => sub { $_[0]->value }, fallback => 1;
+use overload
+  '""'     => sub { $_[0]->value },
+  fallback => 1;
 
 has 'value' => (
-  is       => 'ro',
-  required => 1,
-  isa      => sub {
-    my $v = $_[0];
-    my $display = defined $v ? (ref $v ? ref $v : $v) : '<undef>';
+    is       => 'ro',
+    required => 1,
+    isa      => sub {
+        my $v       = $_[0];
+        my $display = defined $v ? (ref $v ? ref $v : $v) : '<undef>';
 
-    # must be defined, non-ref, non-empty string
-    unless (defined $v && !ref $v && length($v)) {
-      die qq{JSON-RPC method name MUST be a non-empty string, got '$display'};
-    }
+        # must be defined, non-ref, non-empty string
+        unless (defined $v && !ref $v && length($v)) {
+            die
+              qq{JSON-RPC method name MUST be a non-empty string, got '$display'};
+        }
 
-    # reject purely-numeric literal values (e.g. 1) — method must be a string
-    if ($v =~ /^[+-]?\d+(?:\.\d+)?$/) {
-      die qq{JSON-RPC method name MUST be a non-empty string, got '$v'};
-    }
+      # reject purely-numeric literal values (e.g. 1) — method must be a string
+        if ($v =~ /^[+-]?\d+(?:\.\d+)?$/) {
+            die qq{JSON-RPC method name MUST be a non-empty string, got '$v'};
+        }
 
-    # names beginning with 'rpc.' are reserved by the spec
-    if ($v =~ /^rpc\./) {
-      die qq{JSON-RPC method name MUST NOT begin with 'rpc.', got '$v'};
-    }
-  },
+        # names beginning with 'rpc.' are reserved by the spec
+        if ($v =~ /^rpc\./) {
+            die qq{JSON-RPC method name MUST NOT begin with 'rpc.', got '$v'};
+        }
+    },
 );
 
 sub equals {
-  my ($self, $other) = @_;
+    my ($self, $other) = @_;
 
-  return 0 unless defined $other;
+    return 0 unless defined $other;
 
-  if (ref $other) {
-    return 0 unless ref $other eq ref $self;
-    return $self->value eq $other->value ? 1 : 0;
-  }
+    if (ref $other) {
+        return 0 unless ref $other eq ref $self;
+        return $self->value eq $other->value ? 1 : 0;
+    }
 
-  return $self->value eq $other ? 1 : 0;
+    return $self->value eq $other ? 1 : 0;
 }
 
 1;
