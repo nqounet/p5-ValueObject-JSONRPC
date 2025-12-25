@@ -1,11 +1,8 @@
 package ValueObject::JSONRPC;
-use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = "0.01";
-
-
+our $VERSION = "v2.0.0";
 
 1;
 __END__
@@ -36,4 +33,3 @@ it under the same terms as Perl itself.
 nqounet E<lt>mail@nqou.netE<gt>
 
 =cut
-
