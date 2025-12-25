@@ -7,19 +7,19 @@ This file provides concise, actionable guidance for AI agents (e.g., GitHub Copi
 Session findings
 
 - Tests
-  - Run the full test suite with `daiku test` (or `prove -lr t`). In this session the suite passed: All tests PASS (14 files, 16 tests).
+  - Run the full test suite with `prove -lr t`. In this session the suite passed: All tests PASS (14 files, 16 tests).
 
 - Tool usage
   - Always include a `report_intent` call on the same tool-calling turn when invoking tools that modify repository state; use a short gerund intent (≤4 words), e.g., `Updating docs`.
   - Choose appropriate execution modes (sync/async/detached) and set reasonable `initial_wait` durations for long-running commands.
 
 - Documentation & automation
-  - Document how to reproduce CI locally: `cpanm -nq --installdeps --with-develop --with-recommends .` then `daiku test`.
+  - Document how to reproduce CI locally: `cpanm -nq --installdeps --with-develop --with-recommends .` then `prove -lr t`.
 
 Recommendations
 
 - Testing and changes
-  - Run `daiku test` locally before proposing or committing changes.
+  - Run `prove -lr t` locally before proposing or committing changes.
   - Keep changes minimal and surgical; add tests under `t/` for new behavior.
 
 - Coding conventions and expectations
