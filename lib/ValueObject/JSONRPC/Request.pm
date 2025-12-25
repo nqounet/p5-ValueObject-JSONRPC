@@ -5,6 +5,8 @@ use warnings;
 use Moo;
 use namespace::clean -except => 'meta';
 
+with 'ValueObject::JSONRPC::Role::EqualsByAttributes';
+
 use ValueObject::JSONRPC::Version;
 use ValueObject::JSONRPC::MethodName;
 use ValueObject::JSONRPC::Params;
@@ -56,23 +58,7 @@ has 'id' => (
     },
 );
 
-sub equals {
-    my ($self, $other) = @_;
-    return 0 unless defined $other;
-
-    return 0 unless ref $other && ref $other eq ref $self;
-
-    return 0 unless $self->jsonrpc->equals($other->jsonrpc);
-    return 0 unless $self->method->equals($other->method);
-
-    # params: both undef or both equal
-    if (defined $self->params || defined $other->params) {
-        return 0 unless defined $self->params && defined $other->params;
-        return 0 unless $self->params->equals($other->params);
-    }
-
-    return $self->id->equals($other->id) ? 1 : 0;
-}
+sub _equals_attributes { qw(jsonrpc method params id); }
 
 1;
 __END__

@@ -1,4 +1,5 @@
 requires 'Moo';
+requires 'Moo::Role';
 requires 'namespace::clean';
 requires 'version';
 
