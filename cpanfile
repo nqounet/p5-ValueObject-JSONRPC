@@ -1,8 +1,12 @@
-requires 'perl', '5.008001';
+requires 'Moo';
+requires 'namespace::clean';
+requires 'version';
 
-requires 'Moo', '2';
-requires 'namespace::clean', '0';
+on configure => sub {
+    requires 'Module::Build::Tiny', '0.035';
+    requires 'perl', '5.008_001';
+};
 
-on 'test' => sub {
-  requires 'Test2::V0', '0';
+on test => sub {
+    requires 'Test2::V0';
 };

@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "JSON-RPC value objects",
    "author" : [
-      "nqounet <mail@nqou.net>"
+      "nqounet"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.29, CPAN::Meta::Converter version 2.150010",
@@ -28,7 +28,8 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.035"
+            "Module::Build::Tiny" : "0.035",
+            "perl" : "5.008_001"
          }
       },
       "develop" : {
@@ -42,9 +43,9 @@
       },
       "runtime" : {
          "requires" : {
-            "Moo" : "2",
+            "Moo" : "0",
             "namespace::clean" : "0",
-            "perl" : "5.008001"
+            "version" : "0"
          }
       },
       "test" : {
@@ -66,6 +67,10 @@
       }
    },
    "version" : "v2.0.0",
+   "x_authority" : "cpan:NQOUNET",
+   "x_contributors" : [
+      "nqounet <mail@nqou.net>"
+   ],
    "x_serialization_backend" : "JSON::PP version 4.16",
    "x_static_install" : 1
 }

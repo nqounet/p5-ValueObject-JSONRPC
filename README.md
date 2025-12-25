@@ -1,46 +1,43 @@
 [![Actions Status](https://github.com/nqounet/p5-ValueObject-JSONRPC/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/nqounet/p5-ValueObject-JSONRPC/actions?workflow=test)
+# NAME
 
-# ValueObject::JSONRPC
+ValueObject::JSONRPC - JSON-RPC value objects
 
-Lightweight set of immutable value objects implementing the JSON-RPC
-2.0 primitives used for validating and composing JSON-RPC messages.
+# SYNOPSIS
 
-Implemented value objects
-
-- `ValueObject::JSONRPC::Version` — the `jsonrpc` member (must be the exact string "2.0")
-- `ValueObject::JSONRPC::MethodName` — the `method` member (non-empty string, not starting with `rpc.`)
-- `ValueObject::JSONRPC::Id` — the `id` member (string, number, or null)
-- `ValueObject::JSONRPC::Params` — the `params` member (JSON array or object)
-- `ValueObject::JSONRPC::Code` — the error `code` (integer)
-- `ValueObject::JSONRPC::Error` — error object with `code`, `message`, optional `data`
-- `ValueObject::JSONRPC::Result` — the `result` member (any JSON value)
-- `ValueObject::JSONRPC::Request`, `Notification`, `SuccessResponse`, `ErrorResponse` — message envelopes
-
-Installation
-
-Install prerequisites and the module from the distribution root:
-
-```bash
-cpanm -nq --installdeps --with-develop --with-recommends .
+```perl
+use ValueObject::JSONRPC;
 ```
 
-Run the test suite
+# DESCRIPTION
 
-```bash
-prove -lr t
-```
+Top-level distribution that provides JSON-RPC value objects. Currently
+the distribution implements the JSON-RPC \`jsonrpc\` version value object
+as \`ValueObject::JSONRPC::Version\`.
 
-Developer notes
+The distribution implements a small, focused set of immutable value
+objects that model the JSON-RPC 2.0 protocol primitives. Each value
+object validates its input in the constructor and provides an \`equals\`
+method for comparisons.
 
-- Value objects use `Moo` + `namespace::clean` and are strict about types: constructors die on invalid input.
-- Equality helpers `->equals($other)` accept either a plain scalar or another object of the same class.
-- Deep comparisons for complex structures use `Storable::freeze` internally where appropriate.
-- When adding new value objects, add a corresponding test under `t/value_object/jsonrpc/`.
+Implemented value objects:
 
-License
+\- \`ValueObject::JSONRPC::Version\`
+\- \`ValueObject::JSONRPC::MethodName\`
+\- \`ValueObject::JSONRPC::Id\`
+\- \`ValueObject::JSONRPC::Params\`
+\- \`ValueObject::JSONRPC::Code\`
+\- \`ValueObject::JSONRPC::Error\`
+\- \`ValueObject::JSONRPC::Result\`
+\- \`ValueObject::JSONRPC::Request\`, \`Notification\`, \`SuccessResponse\`, \`ErrorResponse\`
 
-This software is distributed under the same terms as Perl itself.
+# LICENSE
 
-Author
+Copyright (C) nqounet.
 
-nqounet <mail@nqou.net>
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+# AUTHOR
+
+nqounet
