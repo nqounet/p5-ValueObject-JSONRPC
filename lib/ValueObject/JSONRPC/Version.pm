@@ -80,7 +80,7 @@ successfully constructed object).
 =head2 equals($other)
 
   $v->equals('2.0');   # true
-  $v->equals($other_v);# true if $other_v is the same class and has value '2.0'
+  $v->equals($other_v); # true if $other_v is the same class and has value '2.0'
   $v->equals(undef);   # false
 
 Compare this object with either a plain string or another
