@@ -5,6 +5,8 @@ use version;
 
 our $VERSION = version->declare("v2.0.0");
 
+# See ValueObject::JSONRPC::Version for the JSON-RPC protocol version value object
+
 1;
 __END__
 
@@ -12,7 +14,7 @@ __END__
 
 =head1 NAME
 
-ValueObject::JSONRPC - It's new $module
+ValueObject::JSONRPC - JSON-RPC value objects
 
 =head1 SYNOPSIS
 
@@ -20,7 +22,9 @@ ValueObject::JSONRPC - It's new $module
 
 =head1 DESCRIPTION
 
-ValueObject::JSONRPC is ...
+Top-level distribution that provides JSON-RPC value objects. Currently
+the distribution implements the JSON-RPC `jsonrpc` version value object
+as `ValueObject::JSONRPC::Version`.
 
 =head1 LICENSE
 
@@ -31,6 +35,6 @@ it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-nqounet E<lt>mail@nqou.netE<gt>
+nqounet
 
 =cut

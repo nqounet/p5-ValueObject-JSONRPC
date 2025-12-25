@@ -1,31 +1,39 @@
 package ValueObject::JSONRPC::Version;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
+
+use constant REQUIRED_VERSION => '2.0';
 
 use Moo;
 use namespace::clean -except => 'meta';
+
 use overload '""' => sub { $_[0]->value }, fallback => 1;
 
 has 'value' => (
   is      => 'ro',
-  default => sub {'2.0'},
+  default => sub { REQUIRED_VERSION },
   isa     => sub {
-    die qq{JSON-RPC version MUST be '2.0', got '$_[0]'}
-      unless defined $_[0] && $_[0] eq '2.0';
+    my $v = $_[0];
+    my $display = defined $v ? $v : '<undef>';
+    unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
+      die qq{JSON-RPC version MUST be '} . REQUIRED_VERSION . qq{', got '$display'};
+    }
   },
 );
 
 sub equals {
   my ($self, $other) = @_;
 
-  return unless defined $other;
+  return 0 unless defined $other;
 
+  # object: must be same class and have the same value
   if (ref $other) {
-    return unless ref $other eq ref $self;
-    return $self->value eq $other->value;
+    return 0 unless ref $other eq ref $self;
+    return $self->value eq $other->value ? 1 : 0;
   }
 
-  return $self->value eq $other;
+  # string/primitive: compare directly
+  return $self->value eq $other ? 1 : 0;
 }
 
 1;
@@ -35,60 +43,42 @@ __END__
 
 =head1 NAME
 
-ValueObject::JSONRPC::Version - JSON-RPC protocol version value object
+ValueObject::JSONRPC::Version — JSON-RPC protocol version value object
 
 =head1 SYNOPSIS
 
   use ValueObject::JSONRPC::Version;
 
-  # defaults to the required JSON-RPC version string '2.0'
-  my $v  = ValueObject::JSONRPC::Version->new;
-  my $v2 = ValueObject::JSONRPC::Version->new( value => '2.0' );
-
-  say $v->value;        # '2.0'
-  say "$v";             # '2.0' (stringification)
+  # defaults to the required version
+  my $v = ValueObject::JSONRPC::Version->new;
+  $v->value;            # '2.0'
+  "$v";                # '2.0' (stringification)
   $v->equals('2.0');    # true
-  $v->equals($v2);      # true
 
 =head1 DESCRIPTION
 
-Immutable (read-only) value object that represents the JSON-RPC protocol
-version. JSON-RPC 2.0 requires the exact string '2.0' for the "jsonrpc"
-member; this object enforces that requirement.
+Immutable, read-only value object that represents the JSON-RPC protocol
+version. It enforces the required version (REQUIRED_VERSION, currently
+'2.0') and will die if constructed with any other value.
 
 =head1 METHODS
 
 =head2 new
 
-  my $v = ValueObject::JSONRPC::Version->new;
-  my $v = ValueObject::JSONRPC::Version->new( value => '2.0' );
-
-Constructor. Accepts an optional C<value> argument. The value must be the
-string C<'2.0'>; providing any other value (including numeric 2, other
-strings like C<'2'> or C<'1.0'>, or non-scalar references) will cause the
-constructor to die with the message:
+Constructor. Optional C<value> argument which must equal the required
+version; otherwise the constructor dies with the message shown below.
 
   JSON-RPC version MUST be '2.0', got '...'
 
 =head2 value
 
-  my $str = $v->value;
-
-Read-only accessor that returns the version string (always C<'2.0'> for a
-successfully constructed object).
+Returns the version string.
 
 =head2 equals($other)
 
-  $v->equals('2.0');   # true
-  $v->equals($other_v); # true if $other_v is the same class and has value '2.0'
-  $v->equals(undef);   # false
-
 Compare this object with either a plain string or another
-C<ValueObject::JSONRPC::Version> instance. Behavior:
-
-- If C<$other> is undef returns false.
-- If C<$other> is an object, it must be the same class; otherwise returns false.
-- If C<$other> is a string, returns true when the string equals this object's value.
+C<ValueObject::JSONRPC::Version> instance. Returns 1 for equal, 0 for not.
+C<undef> returns 0. When given an object it must be the same class.
 
 =head1 AUTHOR
 
