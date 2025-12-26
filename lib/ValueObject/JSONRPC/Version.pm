@@ -1,32 +1,24 @@
 package ValueObject::JSONRPC::Version;
 use strict;
 use warnings;
+use parent 'ValueObject::JSONRPC';
 
 use constant REQUIRED_VERSION => '2.0';
 
 use Moo;
-use namespace::clean -except => 'meta';
-
-with 'ValueObject::JSONRPC::Role::EqualsValueString';
-
-use overload
-  '""'     => sub { $_[0]->value },
-  fallback => 1;
+use namespace::clean;
 
 has 'value' => (
-    is      => 'ro',
-    default => sub {REQUIRED_VERSION},
-    isa     => sub {
-        my $v       = $_[0];
-        my $display = defined $v ? $v : '<undef>';
-        unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
-            die qq{JSON-RPC version MUST be '}
-              . REQUIRED_VERSION
-              . qq{', got '$display'};
-        }
-    },
+  is      => 'ro',
+  default => sub {REQUIRED_VERSION},
+  isa     => sub {
+    my $v       = $_[0];
+    my $display = defined $v ? $v : '<undef>';
+    unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
+      die qq{JSON-RPC version MUST be '} . REQUIRED_VERSION . qq{', got '$display'};
+    }
+  },
 );
-
 
 1;
 __END__
@@ -44,7 +36,7 @@ ValueObject::JSONRPC::Version — JSON-RPC protocol version value object
   # defaults to the required version
   my $v = ValueObject::JSONRPC::Version->new;
   $v->value;            # '2.0'
-  "$v";                # '2.0' (stringification)
+  "$v";                # 'ValueObject::JSONRPC::Version(2.0)' (stringification)
   $v->equals('2.0');    # true
 
 =head1 DESCRIPTION

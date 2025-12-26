@@ -1,31 +1,44 @@
 package ValueObject::JSONRPC::Code;
 use strict;
 use warnings;
+use parent 'ValueObject::JSONRPC';
 
 use Moo;
-use namespace::clean -except => 'meta';
-
-with 'ValueObject::JSONRPC::Role::EqualsValueNumber';
-
-use overload
-  '""'     => sub { $_[0]->value },
-  fallback => 1;
+use namespace::clean;
+use Scalar::Util qw(looks_like_number);
+use B ();
 
 has 'value' => (
-    is       => 'ro',
-    required => 1,
-    isa      => sub {
-        my $v = $_[0];
-        if (ref $v) {
-            die qq{JSON-RPC code MUST be an integer, got ref};
-        }
-        unless (defined $v && $v =~ /^-?\d+$/) {
-            die qq{JSON-RPC code MUST be an integer, got '}
-              . (defined $v ? $v : '<undef>') . qq{' };
-        }
-    },
-);
+  is       => 'ro',
+  required => 1,
+  isa      => sub {
+    my $v = $_[0];
+    if (ref $v) {
+      die qq{JSON-RPC code MUST be an integer, got ref};
+    }
+    unless (defined $v) {
+      die qq{JSON-RPC code MUST be an integer, got '<undef>'};
+    }
 
+    # must be a numeric scalar (reject non-numeric strings)
+    unless (looks_like_number($v)) {
+      die qq{JSON-RPC code MUST be an integer, got '} . $v . qq{' };
+    }
+
+    # reject numeric strings: detect if the scalar currently has a POK flag
+    # (i.e. it is stored/known as a string) and looks_like_number succeeded
+    # — in that case we want to refuse (tests expect numeric strings to be rejected).
+    my $sv = B::svref_2object(\$v);
+    if ($sv->POK) {
+      die qq{JSON-RPC code MUST be an integer, got '} . $v . qq{' };
+    }
+
+    # must be an integer value
+    unless ($v == int($v)) {
+      die qq{JSON-RPC code MUST be an integer, got '} . $v . qq{' };
+    }
+  },
+);
 
 1;
 

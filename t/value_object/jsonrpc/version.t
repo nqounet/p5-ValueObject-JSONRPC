@@ -1,50 +1,43 @@
 use strict;
 use Test2::V0 -target => 'ValueObject::JSONRPC::Version';
 
-subtest 'default construction' => sub {
-    my $v = ValueObject::JSONRPC::Version->new;
-    isa_ok $v, ['ValueObject::JSONRPC::Version'];
-    is $v->value, '2.0', 'default value is 2.0';
-    is "$v",      '2.0', 'stringification returns value';
-    ok $v->equals('2.0'), 'equals string value';
+subtest 'default value' => sub {
+  my $v = $CLASS->new;
+  isa_ok $v, ['ValueObject::JSONRPC::Version', 'ValueObject::JSONRPC'];
+  is $v->value,     '2.0',                                                         'default value is 2.0';
+  is $v->to_string, q{bless( {value => '2.0'}, 'ValueObject::JSONRPC::Version' )}, 'to_string returns Dumper format';
 
-# JSON-RPC 2.0 requires the exact string "2.0" for the jsonrpc member.
-# Ensure other representations or different versions are NOT allowed (must die on construction or not equal).
-    ok !$v->equals(2),   'numeric 2 is not equal to "2.0"';
-    ok !$v->equals('2'), 'string "2" is not equal to "2.0"';
+  # Value objects must not be equal to plain non-value values (e.g. raw strings).
+  ok !$v->equals('2.0'), 'non-value (string) is not equal to value object';
 
-    # constructing with the exact allowed value '2.0' succeeds
-    my $v2 = ValueObject::JSONRPC::Version->new(value => '2.0');
-    ok $v->equals($v2), 'objects with same value are equal';
+  # equals against a reference that is not same class should be false
+  ok !$v->equals([]),          'equals with other ref returns false';
+  ok !$v->equals({}),          'equals with other ref returns false';
+  ok !$v->equals(sub {'2.0'}), 'equals with other ref returns false';
 
-    # equals against a reference that is not same class should be false
-    ok !$v->equals([]), 'equals with other ref returns false';
+  # equals with undef should be false
+  ok !$v->equals(''),    'equals undef returns false';
+  ok !$v->equals(0),     'equals undef returns false';
+  ok !$v->equals(undef), 'equals undef returns false';
+};
 
-    # equals with undef should be false
-    ok !$v->equals(undef), 'equals undef returns false';
+subtest 'valid value' => sub {
+  my $v  = $CLASS->new(value => '2.0');
+  my $v2 = $CLASS->new(value => '2.0');
+  isnt "$v", "$v2", 'different object';
+  ok $v->equals($v2), 'objects with same value are equal';
 };
 
 subtest 'invalid versions are rejected' => sub {
-    subtest 'version `2` is rejected' => sub {
-
-# constructing with a numeric 2 should die because only the exact string '2.0' is allowed
-        like dies { ValueObject::JSONRPC::Version->new(value => 2); },
-          qr/\QJSON-RPC version MUST be '2.0'\E/;
-    };
-
-    subtest 'version `1.0` is rejected' => sub {
-
-        # constructing with a different string like '1.0' should also die
-        like dies { ValueObject::JSONRPC::Version->new(value => '1.0'); },
-          qr/\QJSON-RPC version MUST be '2.0'\E/;
-    };
-
-    subtest 'version `[]` is rejected' => sub {
-
-# constructing with a non-scalar (arrayref) should die because of type constraint
-        like dies { ValueObject::JSONRPC::Version->new(value => []); },
-          qr/\QJSON-RPC version MUST be '2.0'\E/;
-    };
+  like dies { $CLASS->new(value => 2) },     qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => '1.0') }, qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => '') },    qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => undef) }, qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => +[]) },   qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => +{}) },   qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies {
+    $CLASS->new(value => sub {'2.0'})
+  }, qr/\QJSON-RPC version MUST be '2.0'\E/;
 };
 
 done_testing;

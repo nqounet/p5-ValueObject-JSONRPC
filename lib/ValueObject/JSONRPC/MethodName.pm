@@ -1,39 +1,33 @@
 package ValueObject::JSONRPC::MethodName;
 use strict;
 use warnings;
+use parent 'ValueObject::JSONRPC';
 
 use Moo;
-use namespace::clean -except => 'meta';
-
-with 'ValueObject::JSONRPC::Role::EqualsValueString';
-
-use overload
-  '""'     => sub { $_[0]->value },
-  fallback => 1;
+use namespace::clean;
 
 has 'value' => (
-    is       => 'ro',
-    required => 1,
-    isa      => sub {
-        my $v       = $_[0];
-        my $display = defined $v ? (ref $v ? ref $v : $v) : '<undef>';
+  is       => 'ro',
+  required => 1,
+  isa      => sub {
+    my $v       = $_[0];
+    my $display = defined $v ? (ref $v ? ref $v : $v) : '<undef>';
 
-        # must be defined, non-ref, non-empty string
-        unless (defined $v && !ref $v && length($v)) {
-            die
-              qq{JSON-RPC method name MUST be a non-empty string, got '$display'};
-        }
+    # must be defined, non-ref, non-empty string
+    unless (defined $v && !ref $v && length($v)) {
+      die qq{JSON-RPC method name MUST be a non-empty string, got '$display'};
+    }
 
-      # reject purely-numeric literal values (e.g. 1) — method must be a string
-        if ($v =~ /^[+-]?\d+(?:\.\d+)?$/) {
-            die qq{JSON-RPC method name MUST be a non-empty string, got '$v'};
-        }
+    # reject purely-numeric literal values (e.g. 1) — method must be a string
+    if ($v =~ /^[+-]?\d+(?:\.\d+)?$/) {
+      die qq{JSON-RPC method name MUST be a non-empty string, got '$v'};
+    }
 
-        # names beginning with 'rpc.' are reserved by the spec
-        if ($v =~ /^rpc\./) {
-            die qq{JSON-RPC method name MUST NOT begin with 'rpc.', got '$v'};
-        }
-    },
+    # names beginning with 'rpc.' are reserved by the spec
+    if ($v =~ /^rpc\./) {
+      die qq{JSON-RPC method name MUST NOT begin with 'rpc.', got '$v'};
+    }
+  },
 );
 
 
