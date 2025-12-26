@@ -44,13 +44,16 @@
       "runtime" : {
          "requires" : {
             "Moo" : "0",
-            "Moo::Role" : "0",
+            "Scalar::Util" : "0",
+            "Types::Standard" : "0",
             "namespace::clean" : "0",
+            "parent" : "0",
             "version" : "0"
          }
       },
       "test" : {
          "requires" : {
+            "JSON::PP" : "0",
             "Test2::V0" : "0"
          }
       }

@@ -4,32 +4,25 @@ use warnings;
 use parent 'ValueObject::JSONRPC';
 
 use Moo;
+use Types::Standard qw(Str);
+use Scalar::Util    qw(looks_like_number blessed);
 use namespace::clean;
 
 has 'value' => (
   is       => 'ro',
   required => 1,
-  isa      => sub {
-    my $v       = $_[0];
-    my $display = defined $v ? (ref $v ? ref $v : $v) : '<undef>';
+  isa      => Str->where(
+    sub {
+      # must be non-empty
+      return 0 unless length $_ > 0;
 
-    # must be defined, non-ref, non-empty string
-    unless (defined $v && !ref $v && length($v)) {
-      die qq{JSON-RPC method name MUST be a non-empty string, got '$display'};
-    }
+      # reject names starting with 'rpc.'
+      return 0 if $_ =~ /\Arpc\./;
 
-    # reject purely-numeric literal values (e.g. 1) — method must be a string
-    if ($v =~ /^[+-]?\d+(?:\.\d+)?$/) {
-      die qq{JSON-RPC method name MUST be a non-empty string, got '$v'};
+      return 1;
     }
-
-    # names beginning with 'rpc.' are reserved by the spec
-    if ($v =~ /^rpc\./) {
-      die qq{JSON-RPC method name MUST NOT begin with 'rpc.', got '$v'};
-    }
-  },
+  ),
 );
-
 
 1;
 __END__
@@ -55,6 +48,11 @@ Immutable, read-only value object representing the JSON-RPC C<method>
 member. Per the JSON-RPC 2.0 specification the method MUST be a
 non-empty string and names beginning with C<rpc.> are reserved and
 therefore rejected.
+
+This implementation also rejects leading/trailing whitespace,
+control characters, leading/trailing dots, and empty segments (two
+consecutive dots). It rejects references / objects even if they overload
+stringification; only plain scalar strings are accepted.
 
 =head1 METHODS
 

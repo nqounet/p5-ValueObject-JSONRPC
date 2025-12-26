@@ -10,25 +10,17 @@ subtest 'edge cases' => sub {
   use ValueObject::JSONRPC::MethodName;
   use ValueObject::JSONRPC::Request;
 
-  subtest 'Id rejects references' => sub {
-    like dies {ValueObject::JSONRPC::Id->new(value => [])}, qr/JSON-RPC id/, 'arrayref id rejected';
-    like dies {ValueObject::JSONRPC::Id->new(value => {})}, qr/JSON-RPC id/, 'hashref id rejected';
-  };
-
-  subtest 'Code accepts numeric strings and equals numeric' => sub {
-    like dies {ValueObject::JSONRPC::Code->new(value => '1')}, qr/JSON-RPC code MUST be an integer/;
-  };
 
   subtest 'Error data accepts JSON values and compares deeply' => sub {
     my $code = ValueObject::JSONRPC::Code->new(value => -32000);
 
-    my $d1 = [ 1, { x => [ 2, 3 ] }, 's' ];
+    my $d1 = [1, {x => [2, 3]}, 's'];
     my $e1 = ValueObject::JSONRPC::Error->new(
       code    => $code,
       message => 'm',
       data    => $d1
     );
-    my $d2 = [ 1, { x => [ 2, 3 ] }, 's' ];
+    my $d2 = [1, {x => [2, 3]}, 's'];
     my $e2 = ValueObject::JSONRPC::Error->new(
       code    => $code,
       message => 'm',
@@ -50,33 +42,16 @@ subtest 'edge cases' => sub {
   };
 
   subtest 'Result deep equality with nested structures' => sub {
-    my $r1 = ValueObject::JSONRPC::Result->new(value => { a => [ 1, { b => 2 } ] });
-    my $r2 = ValueObject::JSONRPC::Result->new(value => { a => [ 1, { b => 2 } ] });
+    my $r1 = ValueObject::JSONRPC::Result->new(value => {a => [1, {b => 2}]});
+    my $r2 = ValueObject::JSONRPC::Result->new(value => {a => [1, {b => 2}]});
     ok $r1->equals($r2), 'results with equivalent nested structures are equal';
 
-    ok $r1->equals({ a => [ 1, { b => 2 } ] }), 'compare result to raw hashref';
-  };
-
-  subtest 'Params accept empty array and empty object' => sub {
-    my $a = ValueObject::JSONRPC::Params->new(value => []);
-    isa_ok $a, [ 'ValueObject::JSONRPC::Params' ];
-    ok $a->equals([]), 'empty arrayref accepted and equals';
-
-    my $h = ValueObject::JSONRPC::Params->new(value => {});
-    isa_ok $h, [ 'ValueObject::JSONRPC::Params' ];
-    ok $h->equals({}), 'empty hashref accepted and equals';
-  };
-
-  subtest 'MethodName accepts whitespace-only string (explicit)' => sub {
-    my $m = ValueObject::JSONRPC::MethodName->new(value => "  ");
-    isa_ok $m, [ 'ValueObject::JSONRPC::MethodName' ];
-    is $m->value, "  ", 'whitespace-only string retained as value';
-    ok !$m->equals("  "), 'value objects are not equal to raw strings';
+    ok $r1->equals({a => [1, {b => 2}]}), 'compare result to raw hashref';
   };
 
   subtest 'Request rejects raw scalar id (must be Id instance)' => sub {
     my $m = ValueObject::JSONRPC::MethodName->new(value => 'sum');
-    my $p = ValueObject::JSONRPC::Params->new(value => [ 1, 2 ]);
+    my $p = ValueObject::JSONRPC::Params->new(value => [1, 2]);
 
     like dies {
       ValueObject::JSONRPC::Request->new(

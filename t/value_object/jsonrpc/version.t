@@ -1,5 +1,6 @@
 use strict;
 use Test2::V0 -target => 'ValueObject::JSONRPC::Version';
+use JSON::PP ();    # for JSON::PP::true / false
 
 subtest 'default value' => sub {
   my $v = $CLASS->new;
@@ -29,15 +30,17 @@ subtest 'valid value' => sub {
 };
 
 subtest 'invalid versions are rejected' => sub {
-  like dies { $CLASS->new(value => 2) },     qr/\QJSON-RPC version MUST be '2.0'\E/;
-  like dies { $CLASS->new(value => '1.0') }, qr/\QJSON-RPC version MUST be '2.0'\E/;
-  like dies { $CLASS->new(value => '') },    qr/\QJSON-RPC version MUST be '2.0'\E/;
-  like dies { $CLASS->new(value => undef) }, qr/\QJSON-RPC version MUST be '2.0'\E/;
-  like dies { $CLASS->new(value => +[]) },   qr/\QJSON-RPC version MUST be '2.0'\E/;
-  like dies { $CLASS->new(value => +{}) },   qr/\QJSON-RPC version MUST be '2.0'\E/;
+  like dies { $CLASS->new(value => 2) },               qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => '1.0') },           qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => '') },              qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => undef) },           qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => +[]) },             qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => +{}) },             qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => JSON::PP::true) },  qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => JSON::PP::false) }, qr/did not pass type constraint/;
   like dies {
     $CLASS->new(value => sub {'2.0'})
-  }, qr/\QJSON-RPC version MUST be '2.0'\E/;
+  }, qr/did not pass type constraint/;
 };
 
 done_testing;

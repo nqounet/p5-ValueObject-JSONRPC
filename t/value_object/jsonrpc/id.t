@@ -95,17 +95,15 @@ subtest 'valid value' => sub {
 };
 
 subtest 'invalid versions are rejected' => sub {
-  like dies { $CLASS->new(value => +[]) }, qr/JSON-RPC id MUST be a String, Number, or null/;
-  like dies { $CLASS->new(value => +{}) }, qr/JSON-RPC id MUST be a String, Number, or null/;
+  like dies { $CLASS->new(value => +[]) }, qr/did not pass type constraint/;
+  like dies { $CLASS->new(value => +{}) }, qr/did not pass type constraint/;
   like dies {
     $CLASS->new(value => sub {undef})
-  }, qr/JSON-RPC id MUST be a String, Number, or null/;
+  }, qr/did not pass type constraint/;
 
   subtest 'boolean values are rejected' => sub {
-    my $true  = JSON::PP::true;
-    my $false = JSON::PP::false;
-    like dies { $CLASS->new(value => $true) },  qr/JSON-RPC id MUST be a String, Number, or null/;
-    like dies { $CLASS->new(value => $false) }, qr/JSON-RPC id MUST be a String, Number, or null/;
+    like dies { $CLASS->new(value => JSON::PP::true) },  qr/did not pass type constraint/;
+    like dies { $CLASS->new(value => JSON::PP::false) }, qr/did not pass type constraint/;
   };
 };
 

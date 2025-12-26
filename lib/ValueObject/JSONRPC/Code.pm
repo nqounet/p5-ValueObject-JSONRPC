@@ -6,7 +6,7 @@ use parent 'ValueObject::JSONRPC';
 use Moo;
 use namespace::clean;
 use Scalar::Util qw(looks_like_number);
-use B ();
+use B            ();
 
 has 'value' => (
   is       => 'ro',

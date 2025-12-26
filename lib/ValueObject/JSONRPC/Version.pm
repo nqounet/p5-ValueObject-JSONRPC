@@ -6,18 +6,13 @@ use parent 'ValueObject::JSONRPC';
 use constant REQUIRED_VERSION => '2.0';
 
 use Moo;
+use Types::Standard qw(Enum);
 use namespace::clean;
 
 has 'value' => (
   is      => 'ro',
   default => sub {REQUIRED_VERSION},
-  isa     => sub {
-    my $v       = $_[0];
-    my $display = defined $v ? $v : '<undef>';
-    unless (defined $v && !ref $v && $v eq REQUIRED_VERSION) {
-      die qq{JSON-RPC version MUST be '} . REQUIRED_VERSION . qq{', got '$display'};
-    }
-  },
+  isa     => Enum ['2.0'],
 );
 
 1;

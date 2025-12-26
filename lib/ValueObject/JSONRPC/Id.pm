@@ -4,22 +4,13 @@ use warnings;
 use parent 'ValueObject::JSONRPC';
 
 use Moo;
+use Types::Standard qw(Maybe Str Num);
 use namespace::clean;
 
 has 'value' => (
   is      => 'ro',
   default => sub {undef},
-  isa     => sub {
-    my $v = $_[0];
-
-    # allow undef (null id)
-    return if !defined $v;
-
-    # must be a non-ref scalar (string or number)
-    if (ref $v) {
-      die qq{JSON-RPC id MUST be a String, Number, or null, got ref};
-    }
-  },
+  isa     => Maybe [Str | Num],
 );
 
 1;

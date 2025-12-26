@@ -4,39 +4,14 @@ use warnings;
 use parent 'ValueObject::JSONRPC';
 
 use Moo;
-use Storable qw(freeze);
+use Types::Standard qw(ArrayRef HashRef);
 use namespace::clean;
 
 has 'value' => (
   is       => 'ro',
   required => 1,
-  isa      => sub {
-    my $v = $_[0];
-    unless (ref $v && (ref $v eq 'ARRAY' || ref $v eq 'HASH')) {
-      die qq{JSON-RPC params MUST be an Array or Object, got } . (defined $v ? ref $v : '<undef>');
-    }
-  },
+  isa      => ArrayRef | HashRef,
 );
-
-sub equals {
-  my ($self, $other) = @_;
-  return 0 unless defined $other;
-
-  # compare against same class
-  if (ref $other) {
-    if (ref $other eq ref $self) {
-      return freeze($self->value) eq freeze($other->value) ? 1 : 0;
-    }
-
-    # also allow raw arrayref/hashref comparison
-    if (ref $other eq 'ARRAY' || ref $other eq 'HASH') {
-      return freeze($self->value) eq freeze($other) ? 1 : 0;
-    }
-    return 0;
-  }
-
-  return 0;
-}
 
 1;
 
