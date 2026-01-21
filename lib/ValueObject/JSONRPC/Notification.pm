@@ -1,59 +1,47 @@
 package ValueObject::JSONRPC::Notification;
 use strict;
 use warnings;
+use parent 'ValueObject::JSONRPC';
 
 use Moo;
-use namespace::clean -except => 'meta';
-
-with 'ValueObject::JSONRPC::Role::EqualsByAttributes';
+use Types::Standard qw(InstanceOf);
 
 use ValueObject::JSONRPC::Version;
 use ValueObject::JSONRPC::MethodName;
 use ValueObject::JSONRPC::Params;
-
-# Prevent passing an `id` (notifications must not have an id member)
-sub BUILDARGS {
-    my ($class, %args) = @_;
-    if (exists $args{id}) {
-        die qq{JSON-RPC notification MUST NOT include an 'id' member};
-    }
-    return ref $_[1] ? $_[1] : \%args;
-}
+use namespace::clean;
 
 has 'jsonrpc' => (
-    is      => 'ro',
-    default => sub { ValueObject::JSONRPC::Version->new },
-    isa     => sub {
-        my $v = $_[0];
-        die
-          qq{JSON-RPC notification jsonrpc must be a ValueObject::JSONRPC::Version}
-          unless ref $v && ref $v eq 'ValueObject::JSONRPC::Version';
-    },
+  is       => 'ro',
+  isa      => InstanceOf ['ValueObject::JSONRPC::Version'],
+  required => 1,
 );
 
 has 'method' => (
-    is       => 'ro',
-    required => 1,
-    isa      => sub {
-        my $m = $_[0];
-        die
-          qq{JSON-RPC notification method must be a ValueObject::JSONRPC::MethodName}
-          unless ref $m && ref $m eq 'ValueObject::JSONRPC::MethodName';
-    },
+  is       => 'ro',
+  isa      => InstanceOf ['ValueObject::JSONRPC::MethodName'],
+  required => 1,
 );
 
 has 'params' => (
-    is  => 'ro',
-    isa => sub {
-        my $p = $_[0];
-        return unless defined $p;
-        die
-          qq{JSON-RPC notification params must be a ValueObject::JSONRPC::Params}
-          unless ref $p && ref $p eq 'ValueObject::JSONRPC::Params';
-    },
+  is  => 'ro',
+  isa => InstanceOf ['ValueObject::JSONRPC::Params'],
 );
 
-sub _equals_attributes { qw(jsonrpc method params); }
+sub to_json {
+  my ($self) = @_;
+
+  my %out = (
+    jsonrpc => $self->jsonrpc->value,
+    method  => $self->method->value,
+  );
+
+  if (defined $self->params) {
+    $out{params} = $self->params->value;
+  }
+
+  return \%out;
+}
 
 1;
 __END__
