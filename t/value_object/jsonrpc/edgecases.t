@@ -50,30 +50,34 @@ subtest 'edge cases' => sub {
   };
 
   subtest 'Request rejects raw scalar id (must be Id instance)' => sub {
+    my $v = ValueObject::JSONRPC::Version->new;
     my $m = ValueObject::JSONRPC::MethodName->new(value => 'sum');
     my $p = ValueObject::JSONRPC::Params->new(value => [1, 2]);
 
     like dies {
       ValueObject::JSONRPC::Request->new(
-        method => $m,
-        params => $p,
-        id     => 1
+        jsonrpc => $v,
+        method  => $m,
+        params  => $p,
+        id      => 1
       )
-    }, qr/JSON-RPC request id must be a ValueObject::JSONRPC::Id/, 'raw numeric id rejected';
+    }, qr/not isa ValueObject::JSONRPC::Id/, 'raw numeric id rejected';
     like dies {
       ValueObject::JSONRPC::Request->new(
-        method => $m,
-        params => $p,
-        id     => 'x'
+        jsonrpc => $v,
+        method  => $m,
+        params  => $p,
+        id      => 'x'
       )
-    }, qr/JSON-RPC request id must be a ValueObject::JSONRPC::Id/, 'raw string id rejected';
+    }, qr/not isa ValueObject::JSONRPC::Id/, 'raw string id rejected';
     like dies {
       ValueObject::JSONRPC::Request->new(
-        method => $m,
-        params => $p,
-        id     => []
+        jsonrpc => $v,
+        method  => $m,
+        params  => $p,
+        id      => []
       )
-    }, qr/JSON-RPC request id must be a ValueObject::JSONRPC::Id/, 'ref id rejected';
+    }, qr/not isa ValueObject::JSONRPC::Id/, 'ref id rejected';
   };
 
 };
