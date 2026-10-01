@@ -55,6 +55,8 @@ Implemented value objects:
 - `ValueObject::JSONRPC::Result`
 - `ValueObject::JSONRPC::Request`, `Notification`, `SuccessResponse`, `ErrorResponse`
 
+L<ValueObject::JSONRPC::Codec> converts JSON text to and from these messages.
+
 SEE ALSO
 
 L<ValueObject::JSONRPC::Version>, L<ValueObject::JSONRPC::MethodName>,

@@ -38,21 +38,6 @@ has 'params' => (
   isa => InstanceOf ['ValueObject::JSONRPC::Params'],
 );
 
-sub to_json {
-  my ($self) = @_;
-
-  my %out = (
-    jsonrpc => $self->jsonrpc->value,
-    method  => $self->method->value,
-  );
-
-  if (defined $self->params) {
-    $out{params} = $self->params->value;
-  }
-
-  return \%out;
-}
-
 around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;

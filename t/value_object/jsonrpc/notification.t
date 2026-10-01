@@ -52,37 +52,6 @@ subtest 'Notification construction and equality' => sub {
 
 };
 
-subtest 'Notification to_json' => sub {
-
-  my $v = ValueObject::JSONRPC::Version->new;
-  my $m = ValueObject::JSONRPC::MethodName->new(value => 'notify');
-  my $p = ValueObject::JSONRPC::Params->new(value => {x => 1});
-
-  # with params
-  my $n = $CLASS->new(
-    jsonrpc => $v,
-    method  => $m,
-    params  => $p,
-  );
-  my $json_with_params = $n->to_json;
-  is $json_with_params->{jsonrpc}, $v->value, 'to_json includes jsonrpc value';
-  is $json_with_params->{method},  $m->value, 'to_json includes method value';
-  ok exists $json_with_params->{params},         'to_json includes params when present';
-  ok ref($json_with_params->{params}) eq 'HASH', 'params is a hashref';
-  is $json_with_params->{params}->{x}, 1, 'params value is preserved in to_json';
-
-  # without params
-  my $n3 = $CLASS->new(
-    jsonrpc => $v,
-    method  => $m,
-  );
-  my $json_no_params = $n3->to_json;
-  is $json_no_params->{jsonrpc}, $v->value, 'to_json includes jsonrpc value';
-  is $json_no_params->{method},  $m->value, 'to_json includes method value';
-  ok !exists $json_no_params->{params}, 'to_json does not include params when omitted';
-
-};
-
 subtest 'notification must not have an id' => sub {
   like dies {
     $CLASS->new(
