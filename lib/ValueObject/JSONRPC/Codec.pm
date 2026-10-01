@@ -150,6 +150,10 @@ themselves know nothing about JSON. The JSON implementation defaults to
 L<JSON::PP> and can be replaced with the C<json> constructor argument
 (any object with C<encode> and C<decode>).
 
+C<decode> takes a UTF-8 encoded byte string and C<encode> returns one
+(the wire format). Decode character strings with C<Encode::encode_utf8>
+first. JSON C<true> / C<false> are kept as C<JSON::PP::Boolean> objects.
+
 =head1 METHODS
 
 =head2 decode($text)

@@ -29,6 +29,9 @@ subtest 'spec examples: single messages round-trip' => sub {
     ['ErrorResponse',        '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":"1"}', 'ErrorResponse'],
     ['ErrorResponse null id', '{"jsonrpc":"2.0","error":{"code":-32700,"message":"Parse error"},"id":null}', 'ErrorResponse'],
     ['ErrorResponse data',   '{"jsonrpc":"2.0","error":{"code":1,"message":"m","data":{"a":[1]}},"id":1}', 'ErrorResponse'],
+    ['result true',          '{"jsonrpc":"2.0","result":true,"id":1}',                                     'SuccessResponse'],
+    ['result false',         '{"jsonrpc":"2.0","result":false,"id":1}',                                    'SuccessResponse'],
+    ['boolean in data',      '{"jsonrpc":"2.0","error":{"code":1,"message":"m","data":true},"id":1}',      'ErrorResponse'],
     ['result null',          '{"jsonrpc":"2.0","result":null,"id":1}',                                     'SuccessResponse'],
   ) {
     my ($name, $text, $class) = @$t;
