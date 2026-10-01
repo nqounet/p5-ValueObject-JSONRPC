@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use version;
 
-our $VERSION = version->declare("v2.0.0");
+our $VERSION = version->declare("v0.1.0");
 
 use Data::Dumper qw(DumperX);
 
