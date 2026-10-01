@@ -5,7 +5,20 @@ use version;
 
 our $VERSION = version->declare("v2.0.0");
 
-# See ValueObject::JSONRPC::Version for the JSON-RPC protocol version value object
+use Data::Dumper qw(DumperX);
+
+sub to_string {
+  local $Data::Dumper::Indent    = 0;
+  local $Data::Dumper::Terse     = 1;
+  local $Data::Dumper::Quotekeys = 0;
+  local $Data::Dumper::Sortkeys  = 1;
+  DumperX($_[0]);
+}
+
+sub equals {
+  my ($self, $other) = @_;
+  ref $self eq ref $other && $self->to_string eq $other->to_string;
+}
 
 1;
 __END__
