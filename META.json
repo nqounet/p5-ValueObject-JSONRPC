@@ -29,7 +29,7 @@
       "configure" : {
          "requires" : {
             "Module::Build::Tiny" : "0.035",
-            "perl" : "5.008_001"
+            "perl" : "5.010"
          }
       },
       "develop" : {
