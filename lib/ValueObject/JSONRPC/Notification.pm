@@ -10,6 +10,7 @@ use ValueObject::JSONRPC::Version;
 use ValueObject::JSONRPC::MethodName;
 use ValueObject::JSONRPC::Params;
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 # notifications must not have an id member
 sub BUILDARGS {
@@ -51,6 +52,8 @@ sub to_json {
 
   return \%out;
 }
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 __END__

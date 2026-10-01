@@ -2,6 +2,7 @@ Revision history for Perl extension ValueObject-JSONRPC
 
 {{$NEXT}}
 
+    - 不正値の例外クラス ValueObject::JSONRPC::X（ParseError -32700 / InvalidRequest -32600 / InvalidParams -32602）と to_error を追加。各値オブジェクトの new が X を投げる（メッセージは従来どおり）
     - 属性の型チェックを Types::Standard / Moo の isa に統一（Id, MethodName, Params, Request, Notification など）
     - 全 Value Object が ValueObject::JSONRPC を継承するよう統一し、to_string ベースの equals を基底クラスに集約
     - Role::EqualsByAttributes / EqualsValueNumber / EqualsValueString を削除（Role への依存を廃止）

@@ -11,6 +11,7 @@ use ValueObject::JSONRPC::MethodName;
 use ValueObject::JSONRPC::Params;
 use ValueObject::JSONRPC::Id;
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'jsonrpc' => (
   is       => 'ro',
@@ -40,6 +41,8 @@ has 'id' => (
   },
   required => 1,
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 __END__

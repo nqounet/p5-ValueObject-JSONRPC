@@ -6,6 +6,7 @@ use parent 'ValueObject::JSONRPC';
 use Moo;
 use Storable qw(freeze);
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'value' => (
   is      => 'ro',
@@ -56,6 +57,8 @@ sub equals {
   return 0 unless defined $self->value && !ref $self->value;
   return $self->value eq $other ? 1 : 0;
 }
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 

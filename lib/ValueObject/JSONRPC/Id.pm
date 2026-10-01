@@ -6,12 +6,15 @@ use parent 'ValueObject::JSONRPC';
 use Moo;
 use Types::Standard qw(Maybe Str Num);
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'value' => (
   is      => 'ro',
   default => sub {undef},
   isa     => Maybe [Str | Num],
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 

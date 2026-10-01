@@ -5,6 +5,7 @@ use parent 'ValueObject::JSONRPC';
 
 use Moo;
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'code' => (
   is       => 'ro',
@@ -51,6 +52,8 @@ sub equals {
 
   return 0;
 }
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 

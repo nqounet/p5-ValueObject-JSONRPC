@@ -8,12 +8,15 @@ use constant REQUIRED_VERSION => '2.0';
 use Moo;
 use Types::Standard qw(Enum);
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'value' => (
   is      => 'ro',
   default => sub {REQUIRED_VERSION},
   isa     => Enum ['2.0'],
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 __END__

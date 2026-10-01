@@ -5,6 +5,7 @@ use parent 'ValueObject::JSONRPC';
 
 use Moo;
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 use ValueObject::JSONRPC::Version;
 use ValueObject::JSONRPC::Error;
@@ -49,6 +50,8 @@ has 'id' => (
 );
 
 sub _equals_attributes { qw(jsonrpc error id); }
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 __END__
