@@ -2,6 +2,7 @@ Revision history for Perl extension ValueObject-JSONRPC
 
 {{$NEXT}}
 
+    - 版を v2.0.0 から v0.1.0 に戻した（API 確定まで 1.0 未満。未公開のため破壊的変更の履歴は不要）
     - CI の Perl テストマトリクスを 5.42 / 5.40 / 5.38 / 5.10 の 4 本に絞り、cpanfile の perl 下限を 5.010 に揃えた
     - 不正値の例外クラス ValueObject::JSONRPC::X（ParseError -32700 / InvalidRequest -32600 / InvalidParams -32602）と to_error を追加。各値オブジェクトの new が X を投げる（メッセージは従来どおり）
     - 属性の型チェックを Types::Standard / Moo の isa に統一（Id, MethodName, Params, Request, Notification など）
