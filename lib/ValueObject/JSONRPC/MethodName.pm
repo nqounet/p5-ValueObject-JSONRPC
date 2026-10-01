@@ -7,6 +7,7 @@ use Moo;
 use Types::Standard qw(Str);
 use Scalar::Util    qw(looks_like_number blessed);
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'value' => (
   is       => 'ro',
@@ -26,6 +27,8 @@ has 'value' => (
     }
   ),
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 __END__

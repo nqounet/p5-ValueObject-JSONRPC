@@ -6,12 +6,15 @@ use parent 'ValueObject::JSONRPC';
 use Moo;
 use Types::Standard qw(ArrayRef HashRef);
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 
 has 'value' => (
   is       => 'ro',
   required => 1,
   isa      => ArrayRef | HashRef,
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 

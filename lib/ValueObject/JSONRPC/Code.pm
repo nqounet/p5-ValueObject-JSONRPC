@@ -5,6 +5,7 @@ use parent 'ValueObject::JSONRPC';
 
 use Moo;
 use namespace::clean;
+use ValueObject::JSONRPC::X;
 use Scalar::Util qw(looks_like_number);
 use B            ();
 
@@ -39,6 +40,8 @@ has 'value' => (
     }
   },
 );
+
+around new => \&ValueObject::JSONRPC::X::wrap_new;
 
 1;
 
