@@ -2,5 +2,12 @@ Revision history for Perl extension ValueObject-JSONRPC
 
 {{$NEXT}}
 
+    - 属性の型チェックを Types::Standard / Moo の isa に統一（Id, MethodName, Params, Request, Notification など）
+    - 全 Value Object が ValueObject::JSONRPC を継承するよう統一し、to_string ベースの equals を基底クラスに集約
+    - Role::EqualsByAttributes / EqualsValueNumber / EqualsValueString を削除（Role への依存を廃止）
+    - Notification に to_json を追加
+    - バリデーション強化: Code は数値文字列・非整数を拒否、MethodName は空文字・数値のみ・予約名を拒否
+    - 依存に Types::Standard, Scalar::Util, parent を追加（テストに JSON::PP）
+
     - original version
 
