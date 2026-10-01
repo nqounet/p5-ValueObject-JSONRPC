@@ -31,7 +31,13 @@ has 'params' => (
 
 has 'id' => (
   is       => 'ro',
-  isa      => InstanceOf ['ValueObject::JSONRPC::Id'],
+  isa      => sub {
+    InstanceOf(['ValueObject::JSONRPC::Id'])->assert_valid($_[0]);
+
+    # id MUST NOT be null for a request (notifications omit id)
+    die qq{JSON-RPC request id MUST NOT be null for a request}
+      unless defined $_[0]->value;
+  },
   required => 1,
 );
 

@@ -31,8 +31,10 @@ subtest 'invalid method names are rejected' => sub {
 
   like dies { $CLASS->new(value => 'rpc.test') }, qr/did not pass type constraint/, 'names starting with "rpc." rejected';
 
-  ok lives { $CLASS->new(value => 1) },   'numeric value';
-  ok lives { $CLASS->new(value => '1') }, 'numeric like value';
+  like dies { $CLASS->new(value => 1) },     qr/did not pass type constraint/, 'numeric value rejected';
+  like dies { $CLASS->new(value => '1') },   qr/did not pass type constraint/, 'numeric like value rejected';
+  like dies { $CLASS->new(value => '-1.5') }, qr/did not pass type constraint/, 'signed decimal rejected';
+  ok lives { $CLASS->new(value => '1a') }, 'alphanumeric still accepted';
 };
 
 subtest 'leading/trailing whitespace' => sub {

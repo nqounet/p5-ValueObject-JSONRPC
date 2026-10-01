@@ -83,4 +83,14 @@ subtest 'Notification to_json' => sub {
 
 };
 
+subtest 'notification must not have an id' => sub {
+  like dies {
+    $CLASS->new(
+      jsonrpc => ValueObject::JSONRPC::Version->new,
+      method  => ValueObject::JSONRPC::MethodName->new(value => 'foo'),
+      id      => 1,
+    )
+  }, qr/MUST NOT include an 'id'/, 'id rejected';
+};
+
 done_testing;

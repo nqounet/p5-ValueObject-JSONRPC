@@ -39,14 +39,14 @@ subtest 'Request construction and equality' => sub {
   }, qr/Missing required arguments: id/, 'request without id rejected';
 
   # id => null
-  ok lives {
+  like dies {
     $CLASS->new(
       jsonrpc => $v,
       method  => $m,
       params  => $p,
       id      => ValueObject::JSONRPC::Id->new,
     )
-  };
+  }, qr/id MUST NOT be null/, 'null id rejected';
 };
 
 done_testing;

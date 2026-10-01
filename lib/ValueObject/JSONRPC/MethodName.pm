@@ -16,6 +16,9 @@ has 'value' => (
       # must be non-empty
       return 0 unless length $_ > 0;
 
+      # reject purely-numeric literals (e.g. "123")
+      return 0 if $_ =~ /\A[+-]?\d+(?:\.\d+)?\z/;
+
       # reject names starting with 'rpc.'
       return 0 if $_ =~ /\Arpc\./;
 

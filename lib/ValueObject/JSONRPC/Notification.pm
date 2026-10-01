@@ -11,6 +11,15 @@ use ValueObject::JSONRPC::MethodName;
 use ValueObject::JSONRPC::Params;
 use namespace::clean;
 
+# notifications must not have an id member
+sub BUILDARGS {
+  my ($class, @args) = @_;
+  my %args = @args == 1 && ref $args[0] eq 'HASH' ? %{$args[0]} : @args;
+  die qq{JSON-RPC notification MUST NOT include an 'id' member}
+    if exists $args{id};
+  return \%args;
+}
+
 has 'jsonrpc' => (
   is       => 'ro',
   isa      => InstanceOf ['ValueObject::JSONRPC::Version'],
