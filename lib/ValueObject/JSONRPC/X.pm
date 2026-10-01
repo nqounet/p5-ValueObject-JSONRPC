@@ -89,7 +89,7 @@ stringifies to the original validation message.
 
 =item C<X::ParseError> (-32700)
 
-Reserved for consumers that fail to parse JSON; no constructor throws it.
+Thrown by L<ValueObject::JSONRPC::Codec> when the text is not JSON; no value object constructor throws it.
 
 =item C<X::InvalidRequest> (-32600)
 

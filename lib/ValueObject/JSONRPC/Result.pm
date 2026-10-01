@@ -16,7 +16,7 @@ has 'value' => (
     return if !defined $v;    # null is allowed
     if (ref $v) {
       my $r = ref $v;
-      unless ($r eq 'ARRAY' || $r eq 'HASH') {
+      unless ($r eq 'ARRAY' || $r eq 'HASH' || $r eq 'JSON::PP::Boolean') {
         die qq{JSON-RPC result must be a JSON value (scalar, array, object or null), got ref '$r'};
       }
     }

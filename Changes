@@ -2,13 +2,14 @@ Revision history for Perl extension ValueObject-JSONRPC
 
 {{$NEXT}}
 
+    - ValueObject::JSONRPC::Codec を追加（JSON 文字列 ⇔ メッセージ。batch は要素ごとに メッセージ / X を並べて返す。JSON 実装は既定 JSON::PP で json 引数で差し替え可）。ParseError は Codec が投げる
+    - Notification の to_json を Codec へ移し削除（未公開のため）。JSON::PP を実行時依存に追加
     - 版を v2.0.0 から v0.1.0 に戻した（API 確定まで 1.0 未満。未公開のため破壊的変更の履歴は不要）
     - CI の Perl テストマトリクスを 5.42 / 5.40 / 5.38 / 5.10 の 4 本に絞り、cpanfile の perl 下限を 5.010 に揃えた
     - 不正値の例外クラス ValueObject::JSONRPC::X（ParseError -32700 / InvalidRequest -32600 / InvalidParams -32602）と to_error を追加。各値オブジェクトの new が X を投げる（メッセージは従来どおり）
     - 属性の型チェックを Types::Standard / Moo の isa に統一（Id, MethodName, Params, Request, Notification など）
     - 全 Value Object が ValueObject::JSONRPC を継承するよう統一し、to_string ベースの equals を基底クラスに集約
     - Role::EqualsByAttributes / EqualsValueNumber / EqualsValueString を削除（Role への依存を廃止）
-    - Notification に to_json を追加
     - バリデーション強化: Code は数値文字列・非整数を拒否、MethodName は空文字・数値のみ・予約名を拒否
     - 依存に Types::Standard, Scalar::Util, parent を追加（テストに JSON::PP）
 

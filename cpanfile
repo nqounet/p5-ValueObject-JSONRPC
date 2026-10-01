@@ -1,3 +1,4 @@
+requires 'JSON::PP';
 requires 'Moo';
 requires 'Scalar::Util';
 requires 'Types::Standard';
@@ -11,6 +12,5 @@ on configure => sub {
 };
 
 on test => sub {
-    requires 'JSON::PP';
     requires 'Test2::V0';
 };
